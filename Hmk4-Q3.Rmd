@@ -1,0 +1,141 @@
+---
+title: "Hmk4-Q3.Rmd"
+author: "Ruxin Shen"
+date: "11/12/2018"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r import data}
+foreveralone <- read.csv("foreveralone.csv")
+```
+
+```{r import packages}
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+```
+
+```{r Gender Distribution}
+g1 <- ggplot(foreveralone, aes(x = factor(gender))) + geom_bar() + xlab('gender')
+g1
+```
+As we can see from the plot, most samples in our data set are male. There are a couple of transgender female and a couple of transgender male. There are almost 400 males and fewer than 100 females in our data set.
+
+```{r Gender vs. Obesity}
+g2 <- ggplot(foreveralone, aes(factor(bodyweight))) + 
+  geom_bar(aes(fill = gender), position = position_dodge2(preserve = "single"), stat="count") + 
+  xlab("bodyweight") + ggtitle("Gender vs. Obesity")
+g2
+```
+
+From the plot we can see, gender and obesity are fairly independent. The percentage of overweight, normal weight, under weight and obese population are approximately the same. There are a couple of normal weight transgender male and transgender female. There are also a couple of obese transgender male, but the sample size is too small to make any valid conclusion. 
+
+```{r Gender vs. Pay_for_sex}
+g3 <- ggplot(foreveralone, aes(factor(pay_for_sex))) + 
+  geom_bar(aes(fill = gender), position = position_dodge2(preserve = "single"), stat="count") + 
+  xlab("pay_for_sex") + ggtitle("Willing to pay for sex?")
+g3
+```
+From the plot we can see most people of both genders are not willing to pay for sex. But in the case of willing to pay for sex as well as having already done it, only male and transgender male said yes, none of the female or transgender female said yes. In the case of willing to pay for sex but haven't done it, a lot of male said yes while some female said yes. The percentage of male that says yes but I haven't is much greater than the percentage of female that says yes but I haven't.
+
+```{r}
+g4 <- ggplot(foreveralone, aes(factor(social_fear))) + 
+  geom_bar(aes(fill = gender), position = position_dodge2(preserve = "single"), stat="count") + 
+  xlab("social fear") + ggtitle("Gender vs. Social Fear")
+g4
+```
+All the transgender male and transgender female are claiming that they have social fear. Although the sample size is really small, but is there a causal relation between transgender and social fear?
+About two-thirds of both male and female claim they have social fear while the other one-third claim not. So people who have social fear outweigh people who don't.
+
+```{r}
+library(vcd)
+library(grid)
+alone <-  foreveralone
+alone_mf <- alone %>% filter((gender == "Male") | (gender =="Female"))
+alone_mf$gender <- droplevels(alone_mf$gender)
+count <- alone_mf %>% group_by(social_fear, gender) %>% dplyr::summarize(Freq = n()) 
+
+g <- c("pink","lightblue")
+
+vcd::mosaic(count$gender ~ count$social_fear, count, direction =c('v','h'),
+            gp = gpar(fill = g))
+```
+So basically this mosaic graph shows that male and female are independent of each other with the variable social fear. Which means male and female are almost equally likely to have social fear. Since the sample size of transgender is too small, I dropped it to reflect the true relation between male and female only.
+
+```{r}
+a <- strsplit(as.character(foreveralone$what_help_from_others),', ')
+help <- as.data.frame(matrix(nrow = 469, ncol = 5))
+for (i in 1:469){
+  if("wingman/wingwoman" %in% a[i]){
+    help[i,1]=1
+  }
+  else{
+    help[i,1]=0
+  }
+  if("Set me up with a date" %in% a[i]){
+    help[i,2]=1
+  }
+  else{
+    help[i,2]=0
+  }
+  if("date coaching" %in%  a[i]){
+    help[i,3]=1
+  }
+  else{
+    help[i,3]=0
+  }
+  if("someone to hang out with me where I can meet met (e.g. class, free event) and sell me up" %in%  a[i]){
+    help[i,4]=1
+  }
+  else{
+    help[i,4]=0
+  }
+  if("I don't want help" %in%  a[i]){
+    help[i,5]=1
+  }
+  else{
+    help[i,5]=0
+  }
+}
+```
+
+```{r}
+colnames(help)[which(names(help) == "V1")] <- "wingman/wingwoman"
+colnames(help)[which(names(help) == "V2")] <- "Set_me_up_with_a_date"
+colnames(help)[which(names(help) == "V3")] <- "date_coaching"
+colnames(help)[which(names(help) == "V4")] <- "someone_to_hang_out_with_me_where_I_can_meet_met"
+colnames(help)[which(names(help) == "V5")] <- "I_dont_want_help"
+df <- cbind(foreveralone, help)
+```
+
+```{r fig.width=8}
+helps <- c("wingman/wingwoman","Set_me_up_with_a_date","date_coaching","someone_to_hang_out_with_me_where_I_can_meet_met","I_dont_want_help")
+x <- colSums(help)
+test <- cbind(helps,x)
+c <- numeric(sum(x))
+k=1
+for(i in 1:length(x)){
+  for(j in 1:x[i]){
+    c[k] = test[i,1]
+    k = k+1
+  }
+}
+
+c=as.data.frame(c)
+g5 <- ggplot(c, aes(x=c)) + geom_bar()
+g5
+
+```
+Among all of the people, most people are claiming that they don't want help. For people who actually want help, they desire being set up with a date and date coaching the most. For people who don't want help, I wonder being alone may be a choice, and they don't need help at all because they are comfortable just the way they are.
+
+```{r}
+x <- as.data.frame(x)
+gg <- ggplot(x, aes(x = x, y = reorder(helps,x,median),
+  group=helps )) + geom_point() + ylab("what kind of help?") + xlab("number of people select this kind of help") + 
+  ggtitle("What kind of help???")
+gg
+```
