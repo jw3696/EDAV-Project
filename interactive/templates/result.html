@@ -14,17 +14,19 @@
 		<p> Your Happiness score is {{score[0]}} </p>
 
 		<form id="status">
-		  	<input  type='radio' id="gender" name="mode" value="gender" checked>gender</input>
-		  	<input type='radio' id="income" name="mode" value="income">income</input>
-		  	<input type='radio' id="bodyweight" name="mode" value="income">income</input>
+		  	<input  type='radio' id="gender" name="mode" value="g" checked>gender</input>
+		  	<input type='radio' id="income" name="mode" value="i">income</input>
+		  	<input type='radio' id="bodyweight" name="mode" value="b">bodyweight</input>
 		  	<input type='radio' id="sf" name="mode" value="sf">socialfear</input>
-		  	<input type='radio' id="suicide" name="mode" value="suicide">suicide attempt</input>
+		  	<input type='radio' id="suicide" name="mode" value="sa">suicide attempt</input>
 		  	<input type='radio' id="emp" name="mode" value="emp">employment</input>
 		  	<input type='radio' id="edu" name="mode" value="edu">education level</input>
 		</form>
 
 		<script type="text/javascript">
-			var input = {{dataT[0]}}
+			var dt = {{dataT}}
+			var data = {{data}}
+			var input = dt[0]
 			var mydat = [{level:"0-10",value:input[0]},
 						{level:"11-20",value:input[1]},
 						{level:"21-30",value:input[2]},
@@ -42,7 +44,7 @@
 			
 			// axis min / max
 			var ymin = 0;
-			var ymax = 1;
+			var ymax = 0.5;
 		
 			//	Scale functions
 			var xScale = d3.scaleBand().domain(mydat.map(d => d.level)).range([padding, w-padding]);
@@ -56,14 +58,51 @@
 			//    Create SVG element		
 			d3.select("body").append("svg").attr("width",w).attr("height",h);
 			var svg = d3.select("svg");
-			svg.append("rect").attr("x","0").attr("y","0").attr("width",w).attr("height",h).style("fill","aliceblue") ;			
+			svg.append("rect").attr("x","0").attr("y","0").attr("width",w).attr("height",h).style("fill","aliceblue") ;
+			var sel = svg.append("g").attr("id","g1");			
 			
 			//    Create axes
 			svg.append("g").attr("class", "xAxis").attr("transform", `translate (0, ${h-padding})`).call(xAxis);
 			svg.append("g").attr("class", "yAxis").attr("transform", `translate (${padding}, 0)`).call(yAxis);
 
 			//add dom
-			svg.append("g").selectAll("rect").data(mydat,d=>d.level).enter().append("rect").attr("x", d => xScale(d.level)).attr("y",d => (h-padding-yScale(d.value))).attr("height", d=>yScale(d.value)).attr("width","20").attr("fill","orange")
+			svg.select("#g1").selectAll("rect").data(mydat,d=>d.level).enter().append("rect").attr("x", d => xScale(d.level)).attr("height",d => (h-padding-yScale(d.value))).attr("y", d=>yScale(d.value)).attr("width","40").attr("fill","lightgrey")
+
+			$("input[name=mode]").change(function() {
+  				val = this.value;
+  				var idx = 0;
+  				if (val == "g") {
+  					idx = 1 - data[0];
+  				} else if (val == "i"){
+  					if (data[5] != -1) { idx = data[5]+1; } else { idx = 14; }
+  				} else if (val == "b"){ //15-18
+  					if (data[6] != -1) { idx = data[6]+2; } else { idx = 18; }
+  				} else if (val == "sf"){ //19-20
+  					if (data[1] == 1) { idx = 19;} else { idx = 20;}
+  				} else if (val == "sa"){ //21-22
+  					if (data[2] == 1) { idx = 21; } else { idx = 22; }
+  				} else if (val == "emp"){ //23-31
+  					if (data[3] != -1) { idx = data[3]+5; } else { idx = 31; }
+  				} else if (val == "edu"){ //32-40
+  					if (data[4] != -1) { idx = data[4]+6; } else { idx = 40; }
+  				} 
+
+  				input = dt[idx];
+  				mydat = [{level:"0-10",value:input[0]},
+						{level:"11-20",value:input[1]},
+						{level:"21-30",value:input[2]},
+						{level:"31-40",value:input[3]},
+						{level:"41-50",value:input[4]},
+						{level:"51-60",value:input[5]},
+						{level:"61-70",value:input[6]},
+						{level:"71-80",value:input[7]},
+						{level:"81-90",value:input[8]},
+						{level:"91-100",value:input[9]}]
+
+  				svg.select("#g1").selectAll("rect").remove();
+  				svg.select("#g1").selectAll("rect").data(mydat,d=>d.level).enter().append("rect").attr("x", d => xScale(d.level)).attr("height",d => (h-padding-yScale(d.value))).attr("y", d=>yScale(d.value)).attr("width","40").attr("fill","lightgrey")
+
+  			});
 
 		</script>
 
