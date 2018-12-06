@@ -25,6 +25,7 @@
 
 		<script type="text/javascript">
 			var dt = {{dataT}}
+			console.log(dt)
 			var data = {{data}}
 			var input = dt[0]
 			var mydat = [{level:"0-10",value:input[0]},
@@ -65,6 +66,8 @@
 			svg.append("g").attr("class", "xAxis").attr("transform", `translate (0, ${h-padding})`).call(xAxis);
 			svg.append("g").attr("class", "yAxis").attr("transform", `translate (${padding}, 0)`).call(yAxis);
 
+
+
 			//add dom
 			svg.select("#g1").selectAll("rect").data(mydat,d=>d.level).enter().append("rect").attr("x", d => xScale(d.level)).attr("height",d => (h-padding-yScale(d.value))).attr("y", d=>yScale(d.value)).attr("width","40").attr("fill","lightgrey")
 
@@ -100,9 +103,12 @@
 						{level:"91-100",value:input[9]}]
 
   				svg.select("#g1").selectAll("rect").remove();
-  				svg.select("#g1").selectAll("rect").data(mydat,d=>d.level).enter().append("rect").attr("x", d => xScale(d.level)).attr("height",d => (h-padding-yScale(d.value))).attr("y", d=>yScale(d.value)).attr("width","40").attr("fill","lightgrey")
+  				svg.select("#g1").selectAll("rect").data(mydat,d=>d.level).enter().append("rect").attr("id",function(d,i){ return `hello${d[i].level}`}).attr("x", d => xScale(d.level)).attr("height",d => (h-padding-yScale(d.value))).attr("y", d=>yScale(d.value)).attr("width","40").attr("fill","lightgrey")
 
   			});
+
+  			//change color of paragraph
+			d3.select("p").transition().duration(2000).style("color", "red").style("font-size", "40")
 
 		</script>
 
