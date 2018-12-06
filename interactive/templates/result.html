@@ -103,7 +103,7 @@
 						{level:"91-100",value:input[9]}]
 
   				svg.select("#g1").selectAll("rect").remove();
-  				svg.select("#g1").selectAll("rect").data(mydat,d=>d.level).enter().append("rect").attr("id",function(d,i){ return `hello${d[i].level}`}).attr("x", d => xScale(d.level)).attr("height",d => (h-padding-yScale(d.value))).attr("y", d=>yScale(d.value)).attr("width","40").attr("fill","lightgrey")
+  				svg.select("#g1").selectAll("rect").data(mydat,d=>d.level).enter().append("rect").attr("x", d => xScale(d.level)).attr("height",d => (h-padding-yScale(d.value))).attr("y", d=>yScale(d.value)).attr("width","40").attr("fill","lightgrey")
 
   			});
 
