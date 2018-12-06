@@ -50,6 +50,7 @@ def getVal(dat,predict):
 
 datainput = sm.add_constant(data_mat)
 predict = results.predict(exog=datainput)
+predict = np.array([1-x for x in predict])
 dataTable = []
 data_mat = data_mat.tolist()
 def addData(start, end):
