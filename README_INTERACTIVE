@@ -1,0 +1,52 @@
+ Need to fix:
+1. yScale os not working correctly
+2. I set radio buttons but not yet implemented
+3. select user corresponding box and change color
+
+Things to know
+1. dataT: dataset info, each element is a tuple
+column val -> data type : 
+['male',
+ 'female',
+ '$0',
+ '$1 to $10,000',
+ '$10,000 to $19,999',
+ '$100,000 to $124,999',
+ '$125,000 to $149,999',
+ '$150,000 to $174,999',
+ '$174,999 to $199,999',
+ '$20,000 to $29,999',
+ '$200,000 or more',
+ '$30,000 to $39,999',
+ '$40,000 to $49,999',
+ '$50,000 to $74,999',
+ '$75,000 to $99,999',
+ 'Normal weight',
+ 'Obese',
+ 'Overweight',
+ 'Underweight',
+ 'social_fear_yes',
+ 'social_fear_no'
+ 'attempt_suicide_yes',
+ 'attempt_suicide_no',
+ 'A homemaker',
+ 'A student',
+ 'Employed for wages',
+ 'Military',
+ 'Out of work and looking for work',
+ 'Out of work but not currently looking for work',
+ 'Retired',
+ 'Self-employed',
+ 'Unable to work',
+ 'Associate degree',
+ 'Bachelor’s degree',
+ 'Doctorate degree',
+ 'High school graduate, diploma or the equivalent (for example: GED)',
+ 'Master’s degree',
+ 'Professional degree',
+ 'Some college, no degree',
+ 'Some high school, no diploma'
+ 'Trade/technical/vocational training']
+Each is a tuple of levels 0-10 / 11-20 ...
+
+2. User response is in data, in the form of column number, check value in temp.html

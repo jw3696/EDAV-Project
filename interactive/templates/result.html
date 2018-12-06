@@ -1,0 +1,72 @@
+<html>
+	<style>
+	</style>
+
+	<head>
+		<meta charset="utf-8">
+		<title>Results</title>
+		<script src="https://d3js.org/d3.v4.min.js"></script>
+		<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+	</head>
+
+	<body>
+		<h3>Here is your results</h3>
+		<p> Your Happiness score is {{score[0]}} </p>
+
+		<form id="status">
+		  	<input  type='radio' id="gender" name="mode" value="gender" checked>gender</input>
+		  	<input type='radio' id="income" name="mode" value="income">income</input>
+		  	<input type='radio' id="bodyweight" name="mode" value="income">income</input>
+		  	<input type='radio' id="sf" name="mode" value="sf">socialfear</input>
+		  	<input type='radio' id="suicide" name="mode" value="suicide">suicide attempt</input>
+		  	<input type='radio' id="emp" name="mode" value="emp">employment</input>
+		  	<input type='radio' id="edu" name="mode" value="edu">education level</input>
+		</form>
+
+		<script type="text/javascript">
+			var input = {{dataT[0]}}
+			var mydat = [{level:"0-10",value:input[0]},
+						{level:"11-20",value:input[1]},
+						{level:"21-30",value:input[2]},
+						{level:"31-40",value:input[3]},
+						{level:"41-50",value:input[4]},
+						{level:"51-60",value:input[5]},
+						{level:"61-70",value:input[6]},
+						{level:"71-80",value:input[7]},
+						{level:"81-90",value:input[8]},
+						{level:"91-100",value:input[9]}]
+
+			var w = 600;
+			var h = 400;
+			var padding = 30;
+			
+			// axis min / max
+			var ymin = 0;
+			var ymax = 1;
+		
+			//	Scale functions
+			var xScale = d3.scaleBand().domain(mydat.map(d => d.level)).range([padding, w-padding]);
+			var yScale = d3.scaleLinear().domain([ymin,ymax]).range([h-padding, padding]);
+
+			//    Define X axis and Y axis
+			var xAxis = d3.axisBottom().scale(xScale);
+			var yAxis = d3.axisLeft().scale(yScale).ticks(7);
+
+
+			//    Create SVG element		
+			d3.select("body").append("svg").attr("width",w).attr("height",h);
+			var svg = d3.select("svg");
+			svg.append("rect").attr("x","0").attr("y","0").attr("width",w).attr("height",h).style("fill","aliceblue") ;			
+			
+			//    Create axes
+			svg.append("g").attr("class", "xAxis").attr("transform", `translate (0, ${h-padding})`).call(xAxis);
+			svg.append("g").attr("class", "yAxis").attr("transform", `translate (${padding}, 0)`).call(yAxis);
+
+			//add dom
+			svg.append("g").selectAll("rect").data(mydat,d=>d.level).enter().append("rect").attr("x", d => xScale(d.level)).attr("y",d => (h-padding-yScale(d.value))).attr("height", d=>yScale(d.value)).attr("width","20").attr("fill","orange")
+
+		</script>
+
+	</body>
+
+</html>

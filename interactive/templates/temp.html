@@ -1,0 +1,92 @@
+<html>
+  <head>
+    <link rel="shortcut icon" href="https://s3.amazonaws.com/django-blog/ico/favicon_v2.ico">
+  </head>
+
+  <body>
+    <form action="/" method = "POST">
+      <div class="gender">
+        <label>Gender: </label>
+        <input type="radio" name="gender" value="1"> Male
+        <input type="radio" name="gender" value="0"> Female<br>
+      </div>
+      <br>
+      <div class="social fear">
+        <label>Social Fear?: </label>
+        <input type="radio" name="socialFear" value="0"> No 
+        <input type="radio" name="socialFear" value="1"> Yes <br>
+      </div>
+      <br>
+      <div class="suicide">
+        <label>Did you attempted for suicide?: </label>
+        <input type="radio" name="suicide" value="0"> No 
+        <input type="radio" name="suicide" value="1"> Yes <br>
+      </div>
+      <br>
+      <div class="employment">
+        <label>Employment Status: </label>
+        <select name="employment">
+          <option value="23">--Select One--</option>
+          <option value="20">Employed for wages</option>
+          <option value="22">Actively searching</option>
+          <option value="23">Not searching</option>
+          <option value="19">Student</option>
+          <option value="-1">Unable to work</option>
+          <option value="24">Retired</option>
+          <option value="21">Military</option>
+          <option value="25">Self-employed</option>
+          <option value="18">Homemaker</option>
+        </select>
+      </div>
+      <br>
+      <div class="edu_level">
+        <label>Education Level: </label>
+        <select name = "edu">
+          <option value="29">--Select One--</option>
+          <option value="26">Associate degree</option>
+          <option value="32">Some college, no degree</option>
+          <option value="29">High school diploma or the equivalent</option>
+          <option value="27">Bachelor’s degree</option>
+          <option value="-1">Trade/technical/vocational training</option>
+          <option value="30">Master’s degree</option>
+          <option value="33">Some high school, no diploma</option>
+          <option value="28">Doctorate degree</option>
+          <option value="31">Professional degree</option>
+        </select>
+      </div>
+      <br>
+      <div class="income">
+        <label>Income Level: </label>
+        <select name="income">
+          <option value="1">--Select One--</option>
+          <option value="2">$1 to $10,000</option>
+          <option value="3">$10,000 to $19,999</option>
+          <option value="8">$20,000 to $29,999</option>
+          <option value="10">$30,000 to $39,999</option>
+          <option value="11">$40,000 to $49,999</option>
+          <option value="12">$50,000 to $74,999</option>
+          <option value="-1">$75,000 to $99,999</option>
+          <option value="4">$100,000 to $124,999</option>
+          <option value="5">$125,000 to $149,999</option>
+          <option value="6">$150,000 to $174,999</option>
+          <option value="7">$175,000 to $199,999</option>
+          <option value="9">$200,000+ and I am rich</option>
+        </select>
+      </div>
+      <br>
+      <div class="bodyweight">
+        <label>Bodyweight: </label>
+        <select name="bodyweight">
+          <option value="13">Normal Weight</option>
+          <option value="-1">Underweight</option>
+          <option value="15">Overweight</option>
+          <option value="14">Obese</option>
+        </select>
+      </div>
+      
+      <p><input type = "submit" value = "submit"></p>
+
+    </form>
+
+  </body>
+</html>
