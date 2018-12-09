@@ -1,0 +1,104 @@
+---
+title: "Hmk4-Q3"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+The variable chosen is 'income'.
+
+```{r}
+library(ggplot2)
+library(dplyr)
+df = read.csv('data_income_edited.csv',stringsAsFactors=FALSE)
+boxplot(df$income, main = 'Income of people attempted suicide', ylab = '$')
+```
+
+First, examine the boxplot of the income. The boxplot is not very help due to the high number of outliers. The box representing 50% of the data appears as a ligh segment rather than a box.
+```{r}
+df$edu_level[df$edu_level == 'High school graduate, diploma or the equivalent (for example: GED)'] <- 'High school graduate'
+
+```
+
+```{r}
+library(tidyverse)
+ggplot(df, aes(fct_reorder(edu_level, income, median), income)) + 
+  geom_boxplot() + xlab('education level') + coord_flip() + 
+  ggtitle('Income by education level')
+```
+```{r}
+df$friends.f <- as.factor(
+  sapply(df$friends, function(x){
+    ifelse(x > 50, x <- "5. more then 50",
+    ifelse(x > 30 & x <= 50, x <- "4. between 30 - 50",
+    ifelse(x > 10 & x <= 30, x <- "3. between 10 - 30",
+    ifelse(x > 0 & x <= 10, x <- "2. between 1 - 10",
+    x <- "1. no friends"))))
+  })
+)
+
+df$friends.f <- as.factor(
+  sapply(df$friends, function(x){
+    ifelse(x > 50, x <- ">50",
+    ifelse(x > 30 & x <= 50, x <- "30-50",
+    ifelse(x > 10 & x <= 30, x <- "10-30",
+    ifelse(x > 0 & x <= 10, x <- "1-10",
+    x <- "no friends"))))
+  })
+)
+positions <- c('no friends','1-10', '10-30', '30-50', '>50')
+
+ggplot(data = df, aes(x = friends.f, fill = social_fear)) + 
+  ggtitle("Number of friends + Social Fear") + 
+  labs(x = "Number of friends", y = "percentage") +
+  geom_bar(alpha = 0.7
+           , position="fill"
+           , col = 'black') + 
+  scale_fill_manual(values=c("white", "black")) + scale_x_discrete(limits = positions)
+
+
+
+```
+```{r}
+ggplot(data = df, aes(x = friends.f, fill = attempt_suicide)) + 
+  ggtitle("Number of friends + Sucide Attempt") + 
+  labs(x = "Number of friends", y = "percentage") +
+  geom_bar(alpha = 0.7
+           , position="fill"
+           , col = 'black') + 
+  scale_fill_manual(values=c("white", "black")) + scale_x_discrete(limits = positions)
+
+```
+```{r}
+df$employment[df$employment == 'Out of work but not currently looking for work'] <- 'Not looking for work'
+df$employment[df$employment == 'Out of work and looking for work'] <- 'Looking for work'
+
+p1 <- c('Military','A student','Employed for wages','Self-employed','A homemaker','Looking for work','Not looking for work','Unable to work','Retired')
+ggplot(data = df, aes(x = employment, fill = depressed)) + 
+  ggtitle("Employment + Depressed") + 
+  labs(x = "Employment", y = "Percentage") +
+  geom_bar(alpha = 0.7
+           , position="fill"
+           , col = 'black') + 
+  scale_fill_manual(values=c("white", "black")) +scale_x_discrete(limits = p1)+coord_flip() 
+```
+
+```{r}
+p2 <- c('Retired','Military','A homemaker','Employed for wages','A student','Not looking for work','Self-employed','Looking for work','Unable to work')
+ggplot(data = df, aes(x = employment, fill = attempt_suicide)) + 
+  ggtitle("Employment + Suicide attempt") + 
+  labs(x = "Employment", y = "Percentage") +
+  geom_bar(alpha = 0.7
+           , position="fill"
+           , col = 'black') + 
+  scale_fill_manual(values=c("white", "black")) +scale_x_discrete(limits = p2)+coord_flip() 
+```
+```{r}
+ggplot(df, aes(income, color=depressed,fill=depressed)) + geom_density(alpha=0.1) + ggtitle('Density plot for Income vs Depressed')
+```
+```{r}
+ggplot(df,aes(depressed, income))+geom_boxplot()+ ggtitle('Boxplot for Income vs Depressed')
+```
+
