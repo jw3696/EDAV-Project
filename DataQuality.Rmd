@@ -11,6 +11,25 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r}
 library(ggplot2)
 library(dplyr)
-df = read.csv('data_income_edited.csv')
+df = read.csv('data_income_edited.csv',stringsAsFactor = FALSE)
+```
+
+```{r}
+ggplot(df, aes(x=age)) + geom_histogram() + ggtitle('Age of respondents')
+
+```
+
+```{r}
+
+group = c('White non-Hispanic','Asian','Hispanic (of any race)','Black')
+df$race[!df$race %in% group] <- 'Others' 
+
+flower_sorted_color = within(flower, color <- factor(color, 
+                                                     levels=names(sort(table(color)))))
+df = within(df, race <-factor(race, levels=names(sort(table(race)))))
+ggplot(df,aes(x=race)) + geom_bar() + ggtitle('Race of respondents')
+```
+```{r}
+ggplot(df, aes(x=gender)) + geom_bar() + ggtitle('Gender of respondents')
 ```
 
