@@ -12,6 +12,7 @@
 	<body>
 		<h3>Here is your results</h3>
 		<p> Your Happiness score is {{score[0]}} </p>
+		<p> Check out the distributions of people like you! </p>
 
 		<form id="status">
 		  	<input  type='radio' id="gender" name="mode" value="g" checked>gender</input>
@@ -24,6 +25,9 @@
 		</form>
 
 		<script type="text/javascript">
+			var score = {{score[0]}}
+			var pos = Math.floor(score / 10)
+			if (pos == 10) {pos = 9;};
 			var dt = {{dataT}}
 			console.log(dt)
 			var data = {{data}}
@@ -69,7 +73,12 @@
 
 
 			//add dom
-			svg.select("#g1").selectAll("rect").data(mydat,d=>d.level).enter().append("rect").attr("x", d => xScale(d.level)).attr("height",d => (h-padding-yScale(d.value))).attr("y", d=>yScale(d.value)).attr("width","40").attr("fill","lightgrey")
+			svg.select("#g1").selectAll("rect").data(mydat,d=>d.level).enter().append("rect").attr("x", d => xScale(d.level)).attr("height",d => (h-padding-yScale(0))).attr("y", d=>yScale(0)).attr("width","40").attr("fill","lightgrey");
+
+			svg.select("#g1").selectAll("rect").transition().duration(1500).attr("height",d => (h-padding-yScale(d.value))).attr("y", d=>yScale(d.value))
+			d3.select("#g1").selectAll("rect").filter(function(d,i) { return i == pos }).transition().delay(1500).duration(1500).attr("fill","red")
+
+
 
 			$("input[name=mode]").change(function() {
   				val = this.value;
@@ -103,12 +112,16 @@
 						{level:"91-100",value:input[9]}]
 
   				svg.select("#g1").selectAll("rect").remove();
-  				svg.select("#g1").selectAll("rect").data(mydat,d=>d.level).enter().append("rect").attr("x", d => xScale(d.level)).attr("height",d => (h-padding-yScale(d.value))).attr("y", d=>yScale(d.value)).attr("width","40").attr("fill","lightgrey")
+  				svg.select("#g1").selectAll("rect").data(mydat,d=>d.level).enter().append("rect").attr("x", d => xScale(d.level)).attr("height",d => (h-padding-yScale(0))).attr("y", d=>yScale(0)).attr("width","40").attr("fill","lightgrey")
+
+  				svg.select("#g1").selectAll("rect").transition().duration(1500).attr("height",d => (h-padding-yScale(d.value))).attr("y", d=>yScale(d.value))
+  				d3.select("#g1").selectAll("rect").filter(function(d,i) { return i == pos }).transition().delay(1500).duration(1500).attr("fill","red")
+  				//svg.select("#g1").selectAll("rect")._groups[0][pos].transition().duration(1500).attr("fill","red")
 
   			});
 
   			//change color of paragraph
-			d3.select("p").transition().duration(2000).style("color", "red").style("font-size", "40")
+			d3.select("p").transition().duration(2000).style("color", "red").style("font-size", "30")
 
 		</script>
 
