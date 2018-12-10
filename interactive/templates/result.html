@@ -32,16 +32,16 @@
 			console.log(dt)
 			var data = {{data}}
 			var input = dt[0]
-			var mydat = [{level:"0-10",value:input[0]},
-						{level:"11-20",value:input[1]},
-						{level:"21-30",value:input[2]},
-						{level:"31-40",value:input[3]},
-						{level:"41-50",value:input[4]},
-						{level:"51-60",value:input[5]},
-						{level:"61-70",value:input[6]},
-						{level:"71-80",value:input[7]},
-						{level:"81-90",value:input[8]},
-						{level:"91-100",value:input[9]}]
+			var mydat = [{level:"0-9",value:input[0]},
+						{level:"10-19",value:input[1]},
+						{level:"20-29",value:input[2]},
+						{level:"30-39",value:input[3]},
+						{level:"40-49",value:input[4]},
+						{level:"50-59",value:input[5]},
+						{level:"60-69",value:input[6]},
+						{level:"70-79",value:input[7]},
+						{level:"80-89",value:input[8]},
+						{level:"90-100",value:input[9]}]
 
 			var w = 600;
 			var h = 400;
@@ -100,16 +100,16 @@
   				} 
 
   				input = dt[idx];
-  				mydat = [{level:"0-10",value:input[0]},
-						{level:"11-20",value:input[1]},
-						{level:"21-30",value:input[2]},
-						{level:"31-40",value:input[3]},
-						{level:"41-50",value:input[4]},
-						{level:"51-60",value:input[5]},
-						{level:"61-70",value:input[6]},
-						{level:"71-80",value:input[7]},
-						{level:"81-90",value:input[8]},
-						{level:"91-100",value:input[9]}]
+  				mydat = [{level:"0-9",value:input[0]},
+						{level:"10-19",value:input[1]},
+						{level:"20-29",value:input[2]},
+						{level:"30-39",value:input[3]},
+						{level:"40-49",value:input[4]},
+						{level:"50-59",value:input[5]},
+						{level:"60-69",value:input[6]},
+						{level:"70-79",value:input[7]},
+						{level:"80-89",value:input[8]},
+						{level:"90-100",value:input[9]}]
 
   				svg.select("#g1").selectAll("rect").remove();
   				svg.select("#g1").selectAll("rect").data(mydat,d=>d.level).enter().append("rect").attr("x", d => xScale(d.level)).attr("height",d => (h-padding-yScale(0))).attr("y", d=>yScale(0)).attr("width","40").attr("fill","lightgrey")
