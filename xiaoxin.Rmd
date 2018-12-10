@@ -1,5 +1,5 @@
 ---
-title: "Hmk4-Q3"
+title: "main analysis"
 output: html_document
 ---
 
@@ -7,38 +7,48 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-The variable chosen is 'income'.
+
 
 ```{r}
 library(ggplot2)
 library(dplyr)
 df = read.csv('data_income_edited.csv',stringsAsFactors=FALSE)
-boxplot(df$income, main = 'Income of people attempted suicide', ylab = '$')
-```
-
-First, examine the boxplot of the income. The boxplot is not very help due to the high number of outliers. The box representing 50% of the data appears as a ligh segment rather than a box.
-```{r}
-df$edu_level[df$edu_level == 'High school graduate, diploma or the equivalent (for example: GED)'] <- 'High school graduate'
-
 ```
 
 ```{r}
-library(tidyverse)
-ggplot(df, aes(fct_reorder(edu_level, income, median), income)) + 
-  geom_boxplot() + xlab('education level') + coord_flip() + 
-  ggtitle('Income by education level')
+g <- c('white','black')
+df_gender <- df %>% filter(df$gender == 'Male' | df$gender == 'Female') 
+mosaic(depressed ~ gender, df_gender, direction =c('v','h'),gp = gpar(fill = g), main = 'Depressed vs Gender')
+```
+
+```{r}
+library(vcd)
+library(grid)
+g <- c('white','black')
+mosaic(depressed ~ sexuallity, df, direction =c('v','h'),gp = gpar(fill = g), main = 'Depressed vs Sexuality', rot_labels=c(30,0,0,90),gp_labels=(gpar(fontsize=10)))
+
 ```
 ```{r}
-df$friends.f <- as.factor(
-  sapply(df$friends, function(x){
-    ifelse(x > 50, x <- "5. more then 50",
-    ifelse(x > 30 & x <= 50, x <- "4. between 30 - 50",
-    ifelse(x > 10 & x <= 30, x <- "3. between 10 - 30",
-    ifelse(x > 0 & x <= 10, x <- "2. between 1 - 10",
-    x <- "1. no friends"))))
-  })
-)
+mosaic(attempt_suicide ~ sexuallity, df, direction =c('v','h'),gp = gpar(fill = g), main = 'Suicide Attempt vs Sexuality', rot_labels=c(30,0,0,90),gp_labels=(gpar(fontsize=10)))
+```
+```{r}
+mosaic(depressed ~ social_fear, df, direction =c('v','h'),gp = gpar(fill = g), main = 'Depressed vs Social Fear')
+```
+```{r}
+frdep <- df %>% select(friends,depressed) %>% filter(friends <= 50) %>% filter(friends != 0) 
+ggplot(frdep,aes(x=friends,color=depressed,fill=depressed)) + geom_density(alpha = 0.1) + ggtitle('Density plot for Number of friends vs Depressed')
+```
+```{r}
+frddep <- df %>% select(friends, depressed)  %>% filter(friends <= 100) %>% filter(friends != 0) 
+frddep <- frddep[frddep$friends <= 20,]
+ggplot(frddep, aes(x=depressed, y=friends)) + geom_boxplot() + ggtitle('Box plot for Number of friends vs Depressed')
+```
+```{r}
 
+```
+
+
+```{r}
 df$friends.f <- as.factor(
   sapply(df$friends, function(x){
     ifelse(x > 50, x <- ">50",
@@ -100,5 +110,12 @@ ggplot(df, aes(income, color=depressed,fill=depressed)) + geom_density(alpha=0.1
 ```
 ```{r}
 ggplot(df,aes(depressed, income))+geom_boxplot()+ ggtitle('Boxplot for Income vs Depressed')
+```
+
+```{r}
+library(tidyverse)
+ggplot(df, aes(fct_reorder(edu_level, income, median), income)) + 
+  geom_boxplot() + xlab('education level') + coord_flip() + 
+  ggtitle('Income by education level')
 ```
 
